@@ -47,9 +47,9 @@ namespace ConsoleRunner
     static void AssertDiv0Mod0(int x1, int x2, int nd, int xm)
     {
       Assert_AreEqual(x1, (long)nd * x2 + xm);
-      var halfx2 = Math.Abs((long)x2 >> 1);
-      Assert_IsTrue(xm >= -halfx2);
-      Assert_IsTrue(xm < halfx2);
+      var absx2 = Math.Abs((long)x2);
+      Assert_IsTrue((xm * 2L) >= -absx2);
+      Assert_IsTrue((xm * 2L) < absx2);
     }
 
     static void AssertDiv0Mod0(int x1, int x2)
@@ -151,14 +151,14 @@ namespace ConsoleRunner
       const int CORECOUNT = 8;
 
       // about 2.2 billion tests per minute on my PC (release mode) (yes, it is fast)
-      object minutes = 5;
+      object minutes = 1;
 
       evt = new CountdownEvent(CORECOUNT);
 
       for (int i = 0; i < CORECOUNT; i++)
       {
         Thread.Sleep(100); // to make sure ramdon is not using same seed
-        ThreadPool.QueueUserWorkItem(TestDivModExhaustive, minutes);
+        ThreadPool.QueueUserWorkItem(TestDiv0Mod0Exhaustive, minutes);
       }
 
       evt.Wait();
