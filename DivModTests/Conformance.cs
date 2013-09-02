@@ -30,9 +30,9 @@ namespace DivModTests
     static void AssertDiv0Mod0(int x1, int x2, int nd, int xm)
     {
       Assert.AreEqual(x1, (long) nd * x2 + xm);
-      var halfx2 = Math.Abs((long)x2 >> 1);
-      Assert.IsTrue(xm >= -halfx2);
-      Assert.IsTrue(xm < halfx2);
+      var absx2 = Math.Abs((long) x2);
+      Assert.IsTrue((xm * 2L) >= -absx2);
+      Assert.IsTrue((xm * 2L) < absx2);
     }
 
     static void AssertDiv0Mod0(int x1, int x2)

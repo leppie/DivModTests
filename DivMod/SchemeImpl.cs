@@ -25,9 +25,6 @@ public static class SchemeImpl
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Mod(int x1, int x2)
   {
-    // the following can overflow...
-    //return -(Div(x1, x2) * x2 - x1);
-    
     int m = x1 % x2;
 
     if (m == 0 || x1 > 0)
@@ -41,7 +38,7 @@ public static class SchemeImpl
     return m - x2;
   }
 
-  // FIXME: can overflow
+  // FIXME: can overflow, not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static Tuple<int,int> DivMod(int x1, int x2)
   {
@@ -55,17 +52,16 @@ public static class SchemeImpl
     return Tuple.Create(Div(x1, x2), Mod(x1,x2));
   }
 
-  // FIXME: this is all wrong
+  // FIXME: this works, but it is slow due to seperate Div and Mod
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Div0(int x1, int x2)
   {
-    var r = DivMod(x1, x2);
-    int d = r.Item1;
-    int m = r.Item2;
+    var d = Div(x1, x2);
+    int m = Mod(x1, x2);
 
     int halfx2 = Math.Abs(x2 >> 1);
 
-    if (m < halfx2)
+    if (m < (halfx2 + (halfx2 & 1)))
     {
       return d;
     }
@@ -76,14 +72,14 @@ public static class SchemeImpl
     return d - 1;
   }
 
-  // FIXME: can overflow
+  // FIXME: can overflow, not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Mod0(int x1, int x2)
   {
     return -(Div0(x1, x2) * x2 - x1);
   }
 
-  // FIXME: can overflow
+  // FIXME: can overflow, not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static Tuple<int, int> Div0Mod0(int x1, int x2)
   {
