@@ -38,12 +38,12 @@ public static class SchemeImpl
     return m - x2;
   }
 
-  // FIXME: can overflow, not allowed to use long
+  // FIXME: not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static Tuple<int,int> DivMod(int x1, int x2)
   {
     var nd = Div(x1, x2);
-    return Tuple.Create(nd, -(nd * x2 - x1));
+    return Tuple.Create(nd, (int) -((long)nd * x2 - x1));
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -56,12 +56,13 @@ public static class SchemeImpl
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Div0(int x1, int x2)
   {
-    var d = Div(x1, x2);
-    int m = Mod(x1, x2);
+    var r = DivMod(x1, x2);
+    var d = r.Item1;
+    int m = r.Item2;
 
-    int halfx2 = Math.Abs(x2 >> 1);
+    int halfx2 = Math.Abs(x2 / 2);
 
-    if (m < (halfx2 + (halfx2 & 1)))
+    if (m < (halfx2 + (x2 & 1)))
     {
       return d;
     }
@@ -72,19 +73,20 @@ public static class SchemeImpl
     return d - 1;
   }
 
-  // FIXME: can overflow, not allowed to use long
+  // FIXME: not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Mod0(int x1, int x2)
   {
-    return -(Div0(x1, x2) * x2 - x1);
+    var nd = Div0(x1, x2);
+    return (int) -((long)nd*x2 - x1);
   }
 
-  // FIXME: can overflow, not allowed to use long
+  // FIXME: not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static Tuple<int, int> Div0Mod0(int x1, int x2)
   {
     var nd = Div0(x1, x2);
-    return Tuple.Create(nd, -(nd * x2 - x1));
+    return Tuple.Create(nd, (int)-((long)nd * x2 - x1));
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
