@@ -52,7 +52,6 @@ public static class SchemeImpl
     return Tuple.Create(Div(x1, x2), Mod(x1,x2));
   }
 
-  // FIXME: this works, but it is slow due to seperate Div and Mod
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Div0(int x1, int x2)
   {
