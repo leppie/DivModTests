@@ -59,9 +59,10 @@ public static class SchemeImpl
     var d = r.Item1;
     int m = r.Item2;
 
-    int halfx2 = Math.Abs(x2 / 2);
+    //int abshalfx2 = Math.Abs(x2 / 2);
+    int abshalfx2 = x2 == int.MinValue ? -(int.MinValue/2) : Math.Abs(x2) >> 1; 
 
-    if (m < (halfx2 + (x2 & 1)))
+    if (m < (abshalfx2 + (x2 & 1)))
     {
       return d;
     }
