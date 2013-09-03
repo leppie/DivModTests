@@ -59,6 +59,12 @@ namespace ConsoleRunner
       AssertDiv0Mod0(x1, x2, nd, xm);
     }
 
+    static void AssertDiv0Mod0Tuple(int x1, int x2)
+    {
+      var dm = SchemeImpl.Div0Mod0(x1, x2);
+      AssertDiv0Mod0(x1, x2, dm.Item1, dm.Item2);
+    }
+
     static void TestDivModExhaustive(object minutes)
     {
       var r = new Random();
@@ -137,6 +143,32 @@ namespace ConsoleRunner
       evt.Signal();
     }
 
+    static void TestDiv0Mod0ExhaustiveTuple(object minutes)
+    {
+      var r = new Random();
+      var till = DateTime.Now.AddMinutes((int)minutes);
+      long c = 0;
+
+      while (till > DateTime.Now)
+      {
+        var i = r.Next(int.MinValue, int.MaxValue);
+        var j = r.Next(int.MinValue, int.MaxValue);
+
+        if (j != 0 && !(i == int.MinValue && j == -1))
+        {
+          AssertDiv0Mod0Tuple(i, j);
+          c++;
+        }
+      }
+
+      lock (LOCK)
+      {
+        total += c;
+      }
+
+      evt.Signal();
+    }
+
     static readonly object LOCK = new object();
 
     static long total = 0;
@@ -158,27 +190,26 @@ namespace ConsoleRunner
       for (int i = 0; i < CORECOUNT; i++)
       {
         Thread.Sleep(100); // to make sure ramdon is not using same seed
-        ThreadPool.QueueUserWorkItem(TestDiv0Mod0Exhaustive, minutes);
+        ThreadPool.QueueUserWorkItem(TestDivModExhaustiveTuple, minutes);
       }
 
       evt.Wait();
 
       Console.WriteLine("DivMod:   " + total);
 
-      /*
       evt = new CountdownEvent(CORECOUNT);
       total = 0;
 
       for (int i = 0; i < CORECOUNT; i++)
       {
         Thread.Sleep(100); // to make sure ramdon is not using same seed
-        ThreadPool.QueueUserWorkItem(TestDivModExhaustiveTuple, minutes);
+        ThreadPool.QueueUserWorkItem(TestDiv0Mod0ExhaustiveTuple, minutes);
       }
 
       evt.Wait();
 
-      Console.WriteLine("DivMod T: " + total);
-       */
+      Console.WriteLine("Div0Mod0: " + total);
+
       return;
     }
   }
