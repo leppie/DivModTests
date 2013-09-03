@@ -38,12 +38,11 @@ public static class SchemeImpl
     return m - x2;
   }
 
-  // FIXME: not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static Tuple<int,int> DivMod(int x1, int x2)
   {
     var nd = Div(x1, x2);
-    return Tuple.Create(nd, (int) -((long)nd * x2 - x1));
+    return Tuple.Create(nd, -(unchecked(nd * x2 - x1)));
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -73,20 +72,18 @@ public static class SchemeImpl
     return d - 1;
   }
 
-  // FIXME: not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Mod0(int x1, int x2)
   {
     var nd = Div0(x1, x2);
-    return (int) -((long)nd*x2 - x1);
+    return -(unchecked(nd * x2 - x1));
   }
 
-  // FIXME: not allowed to use long
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static Tuple<int, int> Div0Mod0(int x1, int x2)
   {
     var nd = Div0(x1, x2);
-    return Tuple.Create(nd, (int)-((long)nd * x2 - x1));
+    return Tuple.Create(nd, -(unchecked(nd * x2 - x1)));
   }
 
   [MethodImpl(MethodImplOptions.AggressiveInlining)]
