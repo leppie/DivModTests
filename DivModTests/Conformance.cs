@@ -65,6 +65,55 @@ namespace DivModTests
     }
 
     [TestMethod]
+    public void TestDivEdge01()
+    {
+      AssertDivMod(123, int.MaxValue);
+    }
+
+    [TestMethod]
+    public void TestDivEdge02()
+    {
+      AssertDivMod(123, int.MinValue);
+    }
+
+    [TestMethod]
+    public void TestDivEdge03()
+    {
+      AssertDivMod(int.MaxValue, 123);
+    }
+
+    [TestMethod]
+    public void TestDivEdge04()
+    {
+      AssertDivMod(int.MinValue, 123);
+    }
+
+    [TestMethod]
+    public void TestDiv0Edge01()
+    {
+      AssertDiv0Mod0(123, int.MaxValue);
+    }
+
+    [TestMethod]
+    public void TestDiv0Edge02()
+    {
+      AssertDiv0Mod0(123, int.MinValue);
+    }
+
+    [TestMethod]
+    public void TestDiv0Edge03()
+    {
+      AssertDiv0Mod0(int.MaxValue, 123);
+    }
+
+    [TestMethod]
+    public void TestDiv0Edge04()
+    {
+      AssertDiv0Mod0(int.MinValue, 123);
+    }
+
+
+    [TestMethod]
     public void TestDivModAll01()
     {
       CheckDivMod(123, 10);

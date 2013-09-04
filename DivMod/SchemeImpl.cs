@@ -54,8 +54,8 @@ public static class SchemeImpl
   //[MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Div0(int x1, int x2)
   {
-    int d = 0;// Div(x1, x2);
-
+    // inline div
+    int d = 0;
    
     if (x1 != 0)
     {
@@ -72,11 +72,13 @@ public static class SchemeImpl
         d = (x1 + 1) / x2 + 1;
       }
     }
-   
 
     int m = -(unchecked(d * x2 - x1));
 
-    int abshalfx2 = Math.Abs(x2 / 2);
+    int halfx2 = x2 / 2;
+
+    // Math.Abs is too slow
+    int abshalfx2 = halfx2 >= 0 ? halfx2 : -halfx2;
 
     if (m < (abshalfx2 + (x2 & 1)))
     {
