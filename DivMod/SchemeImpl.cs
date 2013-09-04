@@ -4,7 +4,7 @@ using System.Runtime.CompilerServices;
 
 public static class SchemeImpl
 {
-  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  //[MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Div(int x1, int x2)
   {
     if (x1 == 0)
@@ -51,15 +51,32 @@ public static class SchemeImpl
     return Tuple.Create(Div(x1, x2), Mod(x1,x2));
   }
 
-  [MethodImpl(MethodImplOptions.AggressiveInlining)]
+  //[MethodImpl(MethodImplOptions.AggressiveInlining)]
   public static int Div0(int x1, int x2)
   {
-    var r = DivMod(x1, x2);
-    var d = r.Item1;
-    int m = r.Item2;
+    int d = 0;// Div(x1, x2);
 
-    //int abshalfx2 = Math.Abs(x2 / 2);
-    int abshalfx2 = x2 == int.MinValue ? -(int.MinValue/2) : Math.Abs(x2) >> 1; 
+   
+    if (x1 != 0)
+    {
+      if (x1 > 0)
+      {
+        d = x1 / x2;
+      }
+      else if (x2 > 0)
+      {
+        d = (x1 + 1) / x2 - 1;
+      }
+      else
+      {
+        d = (x1 + 1) / x2 + 1;
+      }
+    }
+   
+
+    int m = -(unchecked(d * x2 - x1));
+
+    int abshalfx2 = Math.Abs(x2 / 2);
 
     if (m < (abshalfx2 + (x2 & 1)))
     {
